@@ -13,7 +13,6 @@ public class UDPListener : MonoBehaviour
 
     public const int listenPort = 11000;
     public const int clientPort = 11001;
-    public int messageDelay = 33;
     public event EventHandler<Vector3> DataReceived;
 
     private UdpClient udpClient;
@@ -22,16 +21,7 @@ public class UDPListener : MonoBehaviour
     {
         udpClient = ConnectTo("localhost", listenPort, clientPort);
 
-        //Task.Factory.StartNew(() => SendMessages(udpClient, messageDelay));
         Task.Factory.StartNew(() => ListenForMessages(udpClient));
-        //StartCoroutine(JustWaitASec());
-    }
-
-    IEnumerator JustWaitASec()
-    {
-        yield return new WaitForSeconds(1);
-        Task.Factory.StartNew(() => SendMessages(udpClient, messageDelay));
-        //Task.Factory.StartNew(() => ListenForMessages(udpClient));
     }
 
     static UdpClient ConnectTo(string hostname, int listenPort, int clientPort)
@@ -39,18 +29,6 @@ public class UDPListener : MonoBehaviour
         var connection = new UdpClient(clientPort);
         connection.Connect(hostname, listenPort);
         return connection;
-    }
-    void Send(UdpClient client, string message)
-    {
-        try
-        {
-            var datagram = Encoding.ASCII.GetBytes(message);
-            client.Send(datagram, datagram.Length);
-        } catch (Exception e)
-        {
-            Debug.LogError(e);
-        }
-        
     }
 
     public struct Received
@@ -101,15 +79,6 @@ public class UDPListener : MonoBehaviour
                 UnityEngine.Debug.LogError(ex);
                 return;
             }
-        }
-    }
-
-    async void SendMessages(UdpClient client, int delayms)
-    {
-        while(true)
-        {
-            Send(client, "r");
-            await Task.Delay(delayms);
         }
     }
 

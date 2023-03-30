@@ -1,10 +1,12 @@
+using System;
 using System.Diagnostics;
 using UnityEngine;
 
 public class ProcessRunner : MonoBehaviour
 {
-    public string processPath;
-    public string processArgs;
+    public string processPath; // Path to process to be ran
+    public string processArgs; // Arguments to run process with
+    public event EventHandler ProcessExited; // Raised when the process exits, used for UI to restart process if it ends early
 
     private Process process;
 
@@ -21,24 +23,26 @@ public class ProcessRunner : MonoBehaviour
         {
             UnityEngine.Debug.Log("Closing python server.");
 
-            // Close process by sending a close message to its main window.
-            process.CloseMainWindow();
-            // Free resources associated with process.
-            process.Close();
+            
+            process.CloseMainWindow(); // Close process by sending a close message to its main window
+            process.Close(); // Free resources associated with process
         }
     }
 
-    Process StartProcess(string processPath, string processArgs)
+    // Starts a process inside of a shell
+    public Process StartProcess(string processPath, string processArgs)
     {
         ProcessStartInfo start = new ProcessStartInfo();
         start.FileName = processPath;
         start.Arguments = processArgs;
         start.UseShellExecute = true;
+        process = Process.Start(start);
+        process.Exited += ProcessExited;
         return Process.Start(start);
     }
 
-    public bool HasProcessExited()
+    protected virtual void OnProcessExited() 
     {
-        return process.HasExited;
+        ProcessExited?.Invoke(this, EventArgs.Empty);
     }
 }

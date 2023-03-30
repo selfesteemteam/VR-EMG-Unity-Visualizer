@@ -48,12 +48,13 @@ try:
     # Generating/Sending data for testing
     start_time = time.time()
     while(True):
+        # Change this to take in sensor data and classify it instead
         current_time = time.time() - start_time
 
         # Creates three cosine waves with 120 degree seperation and a domain of [0,1]
         out = ThreeTuple((1 + math.cos(current_time)) / 2, (1 + math.cos(current_time + 2 * math.pi * 0.333)) / 2,
                          (1 + math.cos(current_time + 2 * math.pi * 0.666)) / 2)
-
+        # End changes here
         # Encodes bytes as a set of three floats, and sends it to client process
         out_bytes = out.encode_as_floats()
         broadcast.broadcast("localhost", port_to, out_bytes)

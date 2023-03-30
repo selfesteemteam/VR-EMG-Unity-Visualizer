@@ -23,26 +23,35 @@ public class ProcessRunner : MonoBehaviour
         {
             UnityEngine.Debug.Log("Closing python server.");
 
-            
+            process.Exited -= ProcessExited; // Process is exiting normally, so remove event before it goes off
             process.CloseMainWindow(); // Close process by sending a close message to its main window
             process.Close(); // Free resources associated with process
         }
     }
 
     // Starts a process inside of a shell
-    public Process StartProcess(string processPath, string processArgs)
+    private Process StartProcess(string processPath, string processArgs)
     {
         ProcessStartInfo start = new ProcessStartInfo();
         start.FileName = processPath;
         start.Arguments = processArgs;
         start.UseShellExecute = true;
         process = Process.Start(start);
-        process.Exited += ProcessExited;
-        return Process.Start(start);
+        process.EnableRaisingEvents = true;
+        process.Exited += OnProcessExited;
+        return process;
     }
 
-    protected virtual void OnProcessExited() 
+    public void RestartProcess()
+    {
+        process = Process.Start(process.StartInfo);
+        process.EnableRaisingEvents = true;
+        process.Exited += OnProcessExited;
+    }
+
+    protected virtual void OnProcessExited(object sender, System.EventArgs e) 
     {
         ProcessExited?.Invoke(this, EventArgs.Empty);
+        process.Exited -= ProcessExited; // Remove event handler from object
     }
 }

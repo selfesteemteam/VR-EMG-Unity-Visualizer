@@ -19,3 +19,8 @@ class UDPBroadcaster:
             self.UDP_socket.sendto(bytes_to_send, (ip_to, port_to))
         except:
             raise
+        
+    # Closes the connection
+    def close(self):
+        print("Closing.")
+        #self.UDP_socket.Close()

@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ProcessRunner : MonoBehaviour
 {
@@ -44,7 +46,8 @@ public class ProcessRunner : MonoBehaviour
 
     public void RestartProcess()
     {
-        process = Process.Start(process.StartInfo);
+        process.Exited -= ProcessExited;
+        process = StartProcess(processPath, processArgs);
         process.EnableRaisingEvents = true;
         process.Exited += OnProcessExited;
     }

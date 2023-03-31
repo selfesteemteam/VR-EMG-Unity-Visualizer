@@ -6,22 +6,63 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
+
+[CustomEditor(typeof(UDPListener))]
+public class UDPListenerForceCloseButton : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+
+        UDPListener udpListener = (UDPListener)target;
+        if (GUILayout.Button("Force Close"))
+        {
+            udpListener?.CloseClient();
+        }
+    }
+}
 
 public class UDPListener : MonoBehaviour
 {
 
-    public const int listenPort = 11000; // Server port to listen to
-    public const int clientPort = 11001; // Client port to listen from, must not be equal to server port if running locally
+    public int listenPort = 11000; // Server port to listen to
+    public int clientPort = 11001; // Client port to listen from, must not be equal to server port if running locally
     public event EventHandler<Vector3> DataReceived; // Event to broadcast received data
 
     private UdpClient udpClient; // Client handler
+    private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+    private Task listenTask;
 
     void Start()
     {
         // Connect to socket and begin listening for messages from server
+        Connect();
+    }
+
+    public void Connect()
+    {
         udpClient = ConnectTo("localhost", listenPort, clientPort);
-        Task.Factory.StartNew(() => ListenForMessages(udpClient));
+        listenTask = Task.Factory.StartNew(() => ListenForMessages(udpClient, cancellationTokenSource.Token));
+    }
+
+    private void OnDestroy()
+    {
+        CloseClient();
+    }
+
+    public async void CloseClient()
+    {
+        cancellationTokenSource.Cancel();
+        try
+        {
+            await Task.WhenAll(listenTask);
+        }
+        finally
+        {
+            udpClient?.Close();
+        }
     }
 
     // Connect to the server process
@@ -40,8 +81,9 @@ public class UDPListener : MonoBehaviour
     }
 
     // When message is received, construct message struct
-    async Task<Received> Receive(UdpClient client)
+    async Task<Received> Receive(UdpClient client, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         var result = await client.ReceiveAsync();
         return new Received()
         {
@@ -61,13 +103,14 @@ public class UDPListener : MonoBehaviour
     }
 
     // Listen for messages
-    async void ListenForMessages(UdpClient client)
+    async void ListenForMessages(UdpClient client, CancellationToken cancellationToken)
     {
         while (true)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             try
             {
-                var received = await Receive(udpClient);
+                var received = await Receive(udpClient, cancellationToken);
                 if (received.Message.Length == 12) // Message is a data packet
                 {
                     Vector3 v = MessageToVector3(received.Message); // Convert to vector3
@@ -77,11 +120,6 @@ public class UDPListener : MonoBehaviour
             catch (SocketException ex)
             {
                 // Stop task if socket has been forcibly closed
-                UnityEngine.Debug.LogError(ex);
-                return;
-            }
-            catch (Exception ex)
-            {
                 UnityEngine.Debug.LogError(ex);
                 return;
             }

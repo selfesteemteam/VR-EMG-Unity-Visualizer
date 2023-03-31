@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.guciodevs.simple-min-max-slider": "https://github.com/GucioDevs/SimpleMinMaxSlider.git#upm",
+    "com.pimdewitte.unitymainthreaddispatcher": "https://github.com/PimDeWitte/UnityMainThreadDispatcher.git",
     "com.unity.collab-proxy": "1.17.7",
     "com.unity.feature.development": "1.0.1",
     "com.unity.ide.rider": "3.0.18",
@@ -12,6 +13,8 @@
     "com.unity.ugui": "1.0.0",
     "com.unity.uiextensions": "https://github.com/Unity-UI-Extensions/com.unity.uiextensions.git",
     "com.unity.visualscripting": "1.8.0",
+    "com.unity.xr.management": "4.3.3",
+    "com.unity.xr.openxr": "1.6.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -43,5 +46,14 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "VIVE",
+      "url": "https://npm-registry.vive.com",
+      "scopes": [
+        "com.htc.upm"
+      ]
+    }
+  ]
 }

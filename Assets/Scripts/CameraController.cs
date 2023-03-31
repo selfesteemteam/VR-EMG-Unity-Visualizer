@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Rendering.HybridV2;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
@@ -33,7 +34,7 @@ public class CameraController : MonoBehaviour
     {
 
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             // Rotate Camera
             Cursor.lockState = CursorLockMode.Locked;

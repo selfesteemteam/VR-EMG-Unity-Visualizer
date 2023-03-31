@@ -5,13 +5,13 @@ using System.Threading;
 using UnityEngine;
 using System.Reflection;
 using UnityEditor.Search;
+using UnityEngine.UI.Extensions;
 
 public class ProcessExitedWindow : MonoBehaviour
 {
     public ProcessRunner processRunner;
 
     private CanvasGroup cg;
-    private bool hidden;
 
     private void Start()
     {
@@ -27,38 +27,21 @@ public class ProcessExitedWindow : MonoBehaviour
         }
     }
 
-    private void OnGUI()
-    {
-        if (hidden)
-        {
-            Hide();
-        } else
-        {
-            Show();
-        }
-    }
-
-    void Test(float f)
-    {
-        Debug.Log(Thread.CurrentThread.ManagedThreadId);
-    }
-
     public void Hide()
     {
         cg.alpha = 0f;
         cg.interactable = false;
-        hidden = true;
     }
 
-    public void Show()
+    public IEnumerator Show()
     {
         cg.alpha = 1f;
         cg.interactable = true;
-        hidden = false;
+        yield return null;
     }
 
     void OnProcessClosed(object sender, System.EventArgs e)
     {
-        hidden = true;
+        UnityMainThreadDispatcher.Instance().Enqueue(Show()); // Throw event onto main thread for handling
     }
 }

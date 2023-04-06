@@ -21,14 +21,7 @@ public class ProcessRunner : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (!process.HasExited)
-        {
-            UnityEngine.Debug.Log("Closing python server.");
-
-            process.Exited -= ProcessExited; // Process is exiting normally, so remove event before it goes off
-            process.CloseMainWindow(); // Close process by sending a close message to its main window
-            process.Close(); // Free resources associated with process
-        }
+        CloseProcess();
     }
 
     // Starts a process inside of a shell
@@ -44,9 +37,24 @@ public class ProcessRunner : MonoBehaviour
         return process;
     }
 
+    private void CloseProcess()
+    {
+        process.Exited -= ProcessExited; // Process is exiting normally, so remove event before it goes off
+        if (!process.HasExited)
+        {
+            UnityEngine.Debug.Log("Closing python server.");
+
+            process.CloseMainWindow(); // Close process by sending a close message to its main window
+            process.Close(); // Free resources associated with process
+        } else
+        {
+            UnityEngine.Debug.Log("Attempted to close process that has already exited.");
+        }
+    }
+
     public void RestartProcess()
     {
-        process.Exited -= ProcessExited;
+        CloseProcess();
         process = StartProcess(processPath, processArgs);
         process.EnableRaisingEvents = true;
         process.Exited += OnProcessExited;

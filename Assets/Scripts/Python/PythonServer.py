@@ -63,5 +63,4 @@ except Exception as e:
     logging.exception(e)
     raise e
 finally:
-    logging.info("Closed without exception.")
     broadcast.Close()

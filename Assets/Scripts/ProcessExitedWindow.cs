@@ -7,6 +7,7 @@ using System.Reflection;
 using UnityEditor.Search;
 using UnityEngine.UI.Extensions;
 
+[RequireComponent(typeof(CanvasGroup))]
 public class ProcessExitedWindow : MonoBehaviour
 {
     public ProcessRunner processRunner;
@@ -31,12 +32,14 @@ public class ProcessExitedWindow : MonoBehaviour
     {
         cg.alpha = 0f;
         cg.interactable = false;
+        cg.blocksRaycasts = false;
     }
 
     public IEnumerator Show()
     {
         cg.alpha = 1f;
         cg.interactable = true;
+        cg.blocksRaycasts = true;
         yield return null;
     }
 

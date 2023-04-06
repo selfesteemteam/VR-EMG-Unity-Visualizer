@@ -32,7 +32,7 @@ public class UDPListener : MonoBehaviour
     public event EventHandler<Vector3> DataReceived; // Event to broadcast received data
 
     private UdpClient udpClient; // Client handler
-    private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+    private CancellationTokenSource cancellationTokenSource;
     private Task listenTask;
 
     void Start()
@@ -44,6 +44,7 @@ public class UDPListener : MonoBehaviour
     public void Connect()
     {
         udpClient = ConnectTo("localhost", listenPort, clientPort);
+        cancellationTokenSource = new CancellationTokenSource();
         listenTask = Task.Factory.StartNew(() => ListenForMessages(udpClient, cancellationTokenSource.Token));
     }
 
@@ -61,6 +62,7 @@ public class UDPListener : MonoBehaviour
         }
         finally
         {
+            UnityEngine.Debug.Log("Closed Client.");
             udpClient?.Close();
         }
     }
@@ -105,6 +107,7 @@ public class UDPListener : MonoBehaviour
     // Listen for messages
     async void ListenForMessages(UdpClient client, CancellationToken cancellationToken)
     {
+        UnityEngine.Debug.LogFormat("Listening to {0}.", client.Client.RemoteEndPoint);
         while (true)
         {
             cancellationToken.ThrowIfCancellationRequested();

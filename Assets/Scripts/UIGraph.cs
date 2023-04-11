@@ -49,9 +49,9 @@ public class UIGraph : MonoBehaviour
                 bAnchor.SetLocalPositionAndRotation(new Vector3(b.rect.xMax, Mathf.Lerp(b.rect.yMin, b.rect.yMax, lastPoint.z)), Quaternion.identity);
 
                 // Adjust text
-                rText.text = string.Format("<mspace=0.6em>Red   | {0,3:0.00}", lastPoint.x);
-                gText.text = string.Format("<mspace=0.6em>Green | {0,3:0.00}", lastPoint.y);
-                bText.text = string.Format("<mspace=0.6em>Blue  | {0,3:0.00}", lastPoint.z);
+                rText.text = string.Format("<mspace=0.6em>Neutral | {0,3:0.00}", lastPoint.x);
+                gText.text = string.Format("<mspace=0.6em>Smile   | {0,3:0.00}", lastPoint.y);
+                bText.text = string.Format("<mspace=0.6em>Scowl   | {0,3:0.00}", lastPoint.z);
 
                 // Adjust text draw order
                 // This is pretty awful to look at, may want to refactor

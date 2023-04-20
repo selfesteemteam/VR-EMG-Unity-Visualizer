@@ -1450,8 +1450,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77ee261d9cbc4814f8f3b0c660995e80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  processPath: '"C:\Users\Nicho\AppData\Local\Programs\Python\Python310\python.exe"'
-  processArgs: ' "Assets/Scripts/Python/PythonServer.py" 11000 11001'
+  processPath: '"C:\Users\codyt\anaconda3\envs\VREMG\python.exe"'
+  processArgs: ' "Assets/Scripts/Python/VR_Processing_V5.py" 11000 11001'
 --- !u!1 &558336210
 GameObject:
   m_ObjectHideFlags: 0

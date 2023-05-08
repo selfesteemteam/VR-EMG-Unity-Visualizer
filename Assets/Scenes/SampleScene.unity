@@ -1167,15 +1167,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   source: {fileID: 551735518}
-  rLine: {fileID: 1238162133}
-  gLine: {fileID: 427019922}
-  bLine: {fileID: 562614735}
-  rAnchor: {fileID: 990335780}
-  gAnchor: {fileID: 1530932093}
-  bAnchor: {fileID: 1941674816}
-  rText: {fileID: 348803304}
-  gText: {fileID: 1819107404}
-  bText: {fileID: 330014169}
+  f1Line: {fileID: 1238162133}
+  f2Line: {fileID: 427019922}
+  f3Line: {fileID: 562614735}
+  f1Anchor: {fileID: 990335780}
+  f2Anchor: {fileID: 1530932093}
+  f3Anchor: {fileID: 1941674816}
+  f1Text: {fileID: 348803304}
+  f2Text: {fileID: 1819107404}
+  f3Text: {fileID: 330014169}
   timeRange: 5
   timeResolution: 0.05
   points: []
@@ -1346,7 +1346,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dataSource: {fileID: 551735518}
-  rCurve:
+  f1Curve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -1370,7 +1370,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  gCurve:
+  f2Curve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -1394,7 +1394,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  bCurve:
+  f3Curve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -4864,19 +4864,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dataSource: {fileID: 2008207797}
-  rCurve:
+  f1Curve:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  gCurve:
+  f2Curve:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  bCurve:
+  f3Curve:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2

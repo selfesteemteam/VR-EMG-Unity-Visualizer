@@ -9,9 +9,9 @@ public class AnimationController : MonoBehaviour
     public UDPListener dataSource;
 
     // Curves used to control output values given an input
-    public AnimationCurve rCurve;
-    public AnimationCurve gCurve;
-    public AnimationCurve bCurve;
+    public AnimationCurve f1Curve;
+    public AnimationCurve f2Curve;
+    public AnimationCurve f3Curve;
 
     private Animator animator;
     private Vector3 animationParameters = Vector3.zero;
@@ -44,13 +44,13 @@ public class AnimationController : MonoBehaviour
     void ModifyAnimation(Vector3 param)
     {
         // Final parameter values are input into curves for better control
-        float x = rCurve.Evaluate(param.x);
-        float y = gCurve.Evaluate(param.y);
-        float z = bCurve.Evaluate(param.z);
+        float x = f1Curve.Evaluate(param.x);
+        float y = f2Curve.Evaluate(param.y);
+        float z = f3Curve.Evaluate(param.z);
 
         // Set animator parameters
-        animator.SetFloat("Red", x);
-        animator.SetFloat("Green", y);
-        animator.SetFloat("Blue", z);
+        animator.SetFloat("feature1", x);
+        animator.SetFloat("feature2", y);
+        animator.SetFloat("feature3", z);
     }
 }

@@ -11,9 +11,9 @@ using UnityEngine.UIElements;
 public class UIGraph : MonoBehaviour
 {
     public UDPListener source; // Information source for adding new points
-    public UILineRenderer rLine, gLine, bLine; // Individual lines to plot points
-    public RectTransform rAnchor, gAnchor, bAnchor; // Endpoints for each line
-    public TextMeshProUGUI rText, gText, bText; // Text for each line
+    public UILineRenderer f1Line, f2Line, f3Line; // Individual lines to plot points
+    public RectTransform f1Anchor, f2Anchor, f3Anchor; // Endpoints for each line
+    public TextMeshProUGUI f1Text, f2Text, f3Text; // Text for each line
     public float timeRange; // Range of time the graph plots
     public float timeResolution; // Minimum amount of time between points before a point can be added
 
@@ -44,14 +44,14 @@ public class UIGraph : MonoBehaviour
                 Vector4 lastPoint = points.Last(); // Use the last point in the list for future calculation
 
                 // Adjust anchor points
-                rAnchor.SetLocalPositionAndRotation(new Vector3(b.rect.xMax, Mathf.Lerp(b.rect.yMin, b.rect.yMax, lastPoint.x)), Quaternion.identity);
-                gAnchor.SetLocalPositionAndRotation(new Vector3(b.rect.xMax, Mathf.Lerp(b.rect.yMin, b.rect.yMax, lastPoint.y)), Quaternion.identity);
-                bAnchor.SetLocalPositionAndRotation(new Vector3(b.rect.xMax, Mathf.Lerp(b.rect.yMin, b.rect.yMax, lastPoint.z)), Quaternion.identity);
+                f1Anchor.SetLocalPositionAndRotation(new Vector3(b.rect.xMax, Mathf.Lerp(b.rect.yMin, b.rect.yMax, lastPoint.x)), Quaternion.identity);
+                f2Anchor.SetLocalPositionAndRotation(new Vector3(b.rect.xMax, Mathf.Lerp(b.rect.yMin, b.rect.yMax, lastPoint.y)), Quaternion.identity);
+                f3Anchor.SetLocalPositionAndRotation(new Vector3(b.rect.xMax, Mathf.Lerp(b.rect.yMin, b.rect.yMax, lastPoint.z)), Quaternion.identity);
 
                 // Adjust text
-                rText.text = string.Format("<mspace=0.6em>Neutral | {0,3:0.00}", lastPoint.x);
-                gText.text = string.Format("<mspace=0.6em>Smile   | {0,3:0.00}", lastPoint.y);
-                bText.text = string.Format("<mspace=0.6em>Scowl   | {0,3:0.00}", lastPoint.z);
+                f1Text.text = string.Format("<mspace=0.6em>Neutral | {0,3:0.00}", lastPoint.x);
+                f2Text.text = string.Format("<mspace=0.6em>Smile   | {0,3:0.00}", lastPoint.y);
+                f3Text.text = string.Format("<mspace=0.6em>Scowl   | {0,3:0.00}", lastPoint.z);
 
                 // Adjust text draw order
                 // This is pretty awful to look at, may want to refactor
@@ -63,39 +63,39 @@ public class UIGraph : MonoBehaviour
                     {
                         if (lastPoint.y > lastPoint.z)
                         {
-                            rAnchor.SetSiblingIndex(3);
-                            gAnchor.SetSiblingIndex(4);
-                            bAnchor.SetSiblingIndex(5);
+                            f1Anchor.SetSiblingIndex(3);
+                            f2Anchor.SetSiblingIndex(4);
+                            f3Anchor.SetSiblingIndex(5);
                         } else
                         {
-                            rAnchor.SetSiblingIndex(3);
-                            bAnchor.SetSiblingIndex(4);
-                            gAnchor.SetSiblingIndex(5);
+                            f1Anchor.SetSiblingIndex(3);
+                            f3Anchor.SetSiblingIndex(4);
+                            f2Anchor.SetSiblingIndex(5);
                         }
                     } else
                     {
-                        bAnchor.SetSiblingIndex(3);
-                        rAnchor.SetSiblingIndex(4);
-                        gAnchor.SetSiblingIndex(5);
+                        f3Anchor.SetSiblingIndex(3);
+                        f1Anchor.SetSiblingIndex(4);
+                        f2Anchor.SetSiblingIndex(5);
                     }
                 } else if (lastPoint.y > lastPoint.z)
                 {
                     if (lastPoint.x > lastPoint.z)
                     {
-                        gAnchor.SetSiblingIndex(3);
-                        rAnchor.SetSiblingIndex(4);
-                        bAnchor.SetSiblingIndex(5);
+                        f2Anchor.SetSiblingIndex(3);
+                        f1Anchor.SetSiblingIndex(4);
+                        f3Anchor.SetSiblingIndex(5);
                     } else
                     {
-                        gAnchor.SetSiblingIndex(3);
-                        bAnchor.SetSiblingIndex(4);
-                        rAnchor.SetSiblingIndex(5);
+                        f2Anchor.SetSiblingIndex(3);
+                        f3Anchor.SetSiblingIndex(4);
+                        f1Anchor.SetSiblingIndex(5);
                     }
                 } else
                 {
-                    bAnchor.SetSiblingIndex(3);
-                    gAnchor.SetSiblingIndex(4);
-                    rAnchor.SetSiblingIndex(5);
+                    f3Anchor.SetSiblingIndex(3);
+                    f2Anchor.SetSiblingIndex(4);
+                    f1Anchor.SetSiblingIndex(5);
                 } 
             }
             else // Done to prevent exiting twice
@@ -117,19 +117,19 @@ public class UIGraph : MonoBehaviour
         foreach (Vector4 p in points)
         {
             float x  = Mathf.Lerp(b.rect.xMax, b.rect.xMin, (Time.time - p.w) / timeRange);
-            float yr = Mathf.Lerp(b.rect.yMin, b.rect.yMax, p.x);
-            float yg = Mathf.Lerp(b.rect.yMin, b.rect.yMax, p.y);
-            float yb = Mathf.Lerp(b.rect.yMin, b.rect.yMax, p.z);
+            float y1 = Mathf.Lerp(b.rect.yMin, b.rect.yMax, p.x); // Points for feature 1 line
+            float y2 = Mathf.Lerp(b.rect.yMin, b.rect.yMax, p.y); // Points for feature 2 line
+            float y3 = Mathf.Lerp(b.rect.yMin, b.rect.yMax, p.z); // Points for feature 3 line
 
-            rPlotPoints.Add(new Vector2(x, yr));
-            gPlotPoints.Add(new Vector2(x, yg));
-            bPlotPoints.Add(new Vector2(x, yb));
+            rPlotPoints.Add(new Vector2(x, y1));
+            gPlotPoints.Add(new Vector2(x, y2));
+            bPlotPoints.Add(new Vector2(x, y3));
         }
 
         // Draw lines using point lists
-        rLine.Points = rPlotPoints.ToArray();
-        bLine.Points = bPlotPoints.ToArray();
-        gLine.Points = gPlotPoints.ToArray();
+        f1Line.Points = rPlotPoints.ToArray();
+        f3Line.Points = bPlotPoints.ToArray();
+        f2Line.Points = gPlotPoints.ToArray();
     }
 
     // Observer changes the value of the buffered point so long as the main thread isn't using it

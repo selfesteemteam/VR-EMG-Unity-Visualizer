@@ -14,7 +14,6 @@ public class CanvasGroupToggler : MonoBehaviour
 
     public void Toggle()
     {
-        Debug.Log("Im trying");
         cg.alpha = 1f - cg.alpha;
         cg.interactable = !cg.interactable;
         cg.blocksRaycasts = !cg.blocksRaycasts;
